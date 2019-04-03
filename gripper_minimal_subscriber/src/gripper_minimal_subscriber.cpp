@@ -6,7 +6,7 @@
 
 void print_usage()
 {
-  printf("Usage for gripper_minimal_client app:\n");
+  printf("Usage for gripper_minimal_subscriber app:\n");
   printf("gripper_minimal_subscriber [-t topic] [-h]\n");
   printf("options:\n");
   printf("-h : Print this help function.\n");
