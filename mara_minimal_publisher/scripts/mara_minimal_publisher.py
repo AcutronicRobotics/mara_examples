@@ -1,23 +1,47 @@
 #!/usr/bin/python3
 
-# ROS 2.0
 import rclpy
 from rclpy.qos import qos_profile_default, qos_profile_sensor_data
-# HRIM
 from hrim_actuator_rotaryservo_msgs.msg import GoalRotaryServo
+from time import sleep
+
+# -------- #
 
 rclpy.init(args=None)
 
-node = rclpy.create_node('test_finger_control_service')
+# Create Node with name "mara_minimal_publisher"
+node = rclpy.create_node("mara_minimal_publisher")
 
-publisher = node.create_publisher(GoalRotaryServo, '/hros_actuation_servomotor_000000000001/command', qos_profile=qos_profile_sensor_data)
+# Create a publisher on topic "/hrim_actuation_servomotor_000000000001/goal_axis1"
+pub = node.create_publisher(GoalRotaryServo, '/hrim_actuation_servomotor_000000000001/goal_axis1', qos_profile=qos_profile_sensor_data)
 
-value = 90 # in degrees
-
+# Create message with the same type as the topic, GoalRotaryServo
 msg = GoalRotaryServo()
-msg.position = value * 3.1416/180
-msg.velocity = 0.404
-msg.control_type = 1
-publisher.publish(msg)
 
-rclpy.spin(node)
+# Desired position in degrees
+position_deg = 30
+
+# Loop
+i = 1 # Loop counter
+while rclpy.ok():
+    # Fill message content
+    msg.position = position_deg * 3.1416/180 # Position to rads
+    msg.velocity = 0.4 # Velocity in rads/s
+    msg.control_type = 4 # Position and velocity control
+
+    # Publish message!
+    pub.publish(msg)
+
+    # Spin not really needed here since we don't have callbacks
+    #rclpy.spin_once(node)
+
+    # Sleep 1 second per loop
+    sleep(1.)
+
+    # Log
+    print("Iteration number", i)
+    i += 1
+
+
+node.destroy_node()
+rclpy.shutdown()
