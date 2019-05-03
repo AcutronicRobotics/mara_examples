@@ -1,25 +1,25 @@
 #!/usr/bin/python3
 
-# ROS 2.0
 import rclpy
+from hrim_actuator_rotaryservo_msgs.msg import StateRotaryServo
 
-# HRIM
-from hrim_actuator_rotaryservo_msgs.msg import GoalRotaryServo
+# Function that will be called once a message is published to the topic we are subscribed
+def minimal_callback(msg):
+    print('Position:' + str(msg.position))
 
-def main(args=None):
-    rclpy.init(args=args)
+# -------- #
 
-    node = rclpy.create_node('mara_minimal_subscriber')
+rclpy.init(args=None)
 
-    subscription = node.create_subscription(
-        GoalRotaryServo, '/hros_actuation_servomotor_000000000001/state', lambda msg: node.get_logger().info('Position:' + str(msg.position)))
-    subscription  # prevent unused variable warning
+# Create Node with name "mara_minimal_subscriber"
+node = rclpy.create_node('mara_minimal_subscriber')
 
-    rclpy.spin(node)
+# Subscribe to topic "/hrim_actuation_servomotor_000000000001/state_axis1" and link it to "minimal_callback" function
+node.create_subscription(StateRotaryServo, '/hrim_actuation_servomotor_000000000001/state_axis1', minimal_callback)
 
-    node.destroy_node()
-    rclpy.shutdown()
+# Spin listening to all subscribed topics
+# TODO: It gets stuck here!
+rclpy.spin(node)
 
-
-if __name__ == '__main__':
-    main()
+node.destroy_node()
+rclpy.shutdown()

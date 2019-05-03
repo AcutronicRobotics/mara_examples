@@ -2,27 +2,24 @@
 #include "rclcpp/rclcpp.hpp"
 #include "hrim_actuator_rotaryservo_msgs/msg/state_rotary_servo.hpp"
 
-class MinimalSubscriber : public rclcpp::Node
+void minimalCallback(const hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo::UniquePtr msg)
 {
-public:
-  MinimalSubscriber()
-  : Node("mara_minimal_subscriber")
-  {
-    subscription_ = this->create_subscription<hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo>(
-      "/hros_actuation_servomotor_000000000001/state",
-      [this](hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo::UniquePtr msg) {
-      RCLCPP_INFO(this->get_logger(), "Position: %.5f", msg->position);
-    });
-  }
-
-private:
-  rclcpp::Subscription<hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo>::SharedPtr subscription_;
-};
+  std::cout << "Position: " << msg->position << std::endl;
+}
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalSubscriber>());
+
+  auto node = rclcpp::Node::make_shared("mara_minimal_subscriber");
+
+  auto sub = node->create_subscription<hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo>(
+    "/hrim_actuation_servomotor_000000000001/state_axis1",
+    minimalCallback, rmw_qos_profile_default);
+
+  // TODO: It gets stuck here!
+  rclcpp::spin(node);
+
   rclcpp::shutdown();
   return 0;
 }
