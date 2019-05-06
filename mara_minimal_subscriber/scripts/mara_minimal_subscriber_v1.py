@@ -6,7 +6,7 @@ from hrim_actuator_rotaryservo_msgs.msg import StateRotaryServo
 
 # Function that will be called once a message is published to the topic we are subscribed
 def minimal_callback(msg):
-    print('Position:' + str(msg.position))
+    print('Position:', str(msg.position))
 
 # -------- #
 

@@ -24,7 +24,8 @@ install(TARGETS
 
 install(
   PROGRAMS
-  scripts/mara_minimal_subscriber.py
+  scripts/mara_minimal_subscriber_v1.py
+  scripts/mara_minimal_subscriber_v2.py
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
