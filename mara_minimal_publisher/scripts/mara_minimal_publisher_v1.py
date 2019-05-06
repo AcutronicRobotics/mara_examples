@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import rclpy
-from rclpy.qos import qos_profile_default, qos_profile_sensor_data
+from rclpy.qos import qos_profile_sensor_data
 from hrim_actuator_rotaryservo_msgs.msg import GoalRotaryServo
 from time import sleep
 
@@ -19,7 +19,7 @@ pub = node.create_publisher(GoalRotaryServo, '/hrim_actuation_servomotor_0000000
 msg = GoalRotaryServo()
 
 # Desired position in degrees
-position_deg = 30
+position_deg = 30.
 
 # Loop
 i = 1 # Loop counter
