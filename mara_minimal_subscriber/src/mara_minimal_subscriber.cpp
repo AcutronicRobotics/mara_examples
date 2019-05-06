@@ -15,9 +15,10 @@ int main(int argc, char * argv[])
 
   auto sub = node->create_subscription<hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo>(
     "/hrim_actuation_servomotor_000000000001/state_axis1",
-    minimalCallback, rmw_qos_profile_sensor_data);
+    minimalCallback,
+    rmw_qos_profile_sensor_data); // QoS profile for reading (joint) sensors
 
-  // TODO: It gets stuck here!
+  // Spin listening to all subscribed topics
   rclcpp::spin(node);
 
   rclcpp::shutdown();
