@@ -23,5 +23,5 @@ In a different terminal, run the example you would like to test.
 
 ```
 source ~/ros2_mara_ws/install/setup.bash
-ros2 run mara_minimal_publisher mara_minimal_publisher
+ros2 run mara_minimal_publisher mara_minimal_publisher_v1
 ```
