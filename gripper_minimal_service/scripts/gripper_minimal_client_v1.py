@@ -34,3 +34,7 @@ if future.result() is not None:
     node.get_logger().info('Goal accepted: %d: ' % future.result().goal_accepted)
 else:
     node.get_logger().error('Exception while calling service: %r' % future.exception())
+
+
+node.destroy_node()
+rclpy.shutdown()
