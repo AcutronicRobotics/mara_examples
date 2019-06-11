@@ -16,7 +16,7 @@ rclpy.init(args=None)
 node = rclpy.create_node('mara_minimal_subscriber')
 
 # Subscribe to topic "/hrim_actuation_servomotor_000000000001/state_axis1" and link it to "minimal_callback" function
-node.create_subscription(StateRotaryServo, '/hrim_actuation_servomotor_000000000001/state_axis1', minimal_callback,
+node.create_subscription(StateRotaryServo, '/hrim_actuator_rotaryservo_000000000001/state_axis1', minimal_callback,
     qos_profile=qos_profile_sensor_data) # QoS profile for reading (joint) sensors
 
 # Spin listening to all subscribed topics
