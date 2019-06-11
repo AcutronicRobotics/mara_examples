@@ -11,7 +11,7 @@ class MinimalPublisher : public rclcpp::Node
     count_(0)
     {
       // Create a publisher on topic "/hrim_actuation_servomotor_000000000001/goal_axis1"
-      pub_ = this->create_publisher<hrim_actuator_rotaryservo_msgs::msg::GoalRotaryServo>("/hrim_actuation_servomotor_000000000001/goal_axis1");
+      pub_ = this->create_publisher<hrim_actuator_rotaryservo_msgs::msg::GoalRotaryServo>("/hrim_actuator_rotaryservo_000000000001/goal_axis1", rclcpp::SensorDataQoS());
 
       // Publishing rate of 1 Hz using a wall timer
       timer_ = this->create_wall_timer(1s, std::bind(&MinimalPublisher::timer_callback, this));
@@ -30,7 +30,7 @@ class MinimalPublisher : public rclcpp::Node
       msg->control_type = 4; // Position and velocity control
 
       // Publish message!
-      pub_->publish(msg);
+      pub_->publish(*msg);
 
       // Log
       RCLCPP_INFO(this->get_logger(), "Iteration number %d", count_);
