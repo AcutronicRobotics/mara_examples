@@ -9,9 +9,9 @@ class MinimalSubscriber : public rclcpp::Node
     MinimalSubscriber(): Node("minimal_subscriber")
     {
       sub_ = this->create_subscription<hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo>(
-        "/hrim_actuation_servomotor_000000000001/state_axis1",
-        std::bind(&MinimalSubscriber::minimal_callback, this, _1),
-        rmw_qos_profile_sensor_data);
+        "/hrim_actuator_rotaryservo_000000000001/state_axis1",
+        rclcpp::SensorDataQoS(),
+        std::bind(&MinimalSubscriber::minimal_callback, this, _1));
     }
 
   private:
