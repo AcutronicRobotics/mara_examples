@@ -13,7 +13,7 @@ rclpy.init(args=None)
 node = rclpy.create_node("mara_minimal_publisher")
 
 # Create a publisher on topic "/hrim_actuation_servomotor_000000000001/goal_axis1"
-pub = node.create_publisher(GoalRotaryServo, '/hrim_actuation_servomotor_000000000001/goal_axis1', qos_profile=qos_profile_sensor_data)
+pub = node.create_publisher(GoalRotaryServo, '/hrim_actuator_rotaryservo_000000000001/goal_axis1', qos_profile=qos_profile_sensor_data)
 
 # Create message with the same type as the topic, GoalRotaryServo
 msg = GoalRotaryServo()
