@@ -11,7 +11,7 @@ class MinimalClient(Node):
         super().__init__('mara_minimal_client')
 
         # Create a client for service "/hrim_actuation_gripper_000000000004/goal"
-        self.client = self.create_client(ControlFinger, "/hrim_actuation_gripper_000000000004/goal")
+        self.client = self.create_client(ControlFinger, "/hrim_actuator_gripper_000000000004/fingercontrol")
 
         # Wait for service to be avaiable before calling it
         while not self.client.wait_for_service(timeout_sec=1.0):
@@ -21,7 +21,7 @@ class MinimalClient(Node):
         self.req = ControlFinger.Request()
 
     def send_request(self):
-        self.req.goal_linearposition = 0.87
+        self.req.goal_angularposition = 0.
         self.future = self.client.call_async(self.req)
 
 
