@@ -1,6 +1,9 @@
 # MARA Examples
 
-Please make sure you have followed the steps in [MARA repository](https://github.com/AcutronicRobotics/MARA#install) to set up ROS2, HRIM and dependencies.
+Please make sure you have followed the steps in [MARA repository](https://github.com/AcutronicRobotics/MARA/tree/crystal#install) to set up ROS2, HRIM and dependencies.
+
+_Status of crystal branch_: `gripper_minimal_client` and `gripper_minimal_subscriber` are not fully reviewed. Raise an issue if you have problems or make a PR with your updates.  
+We recommend to use the supported `master` branch (_Dashing_).
 
 ### Terminal 1
 
