@@ -21,24 +21,69 @@ void feedback_callback(
 
   double time_from_start = (double)(feedback->actual.time_from_start.sec) +
                            (double)(feedback->actual.time_from_start.nanosec/1e+9);
-  double time_from_start_desired = (double)(feedback->desired.time_from_start.sec) +
-                                   (double)(feedback->desired.time_from_start.nanosec/1e+9);
-  double time_from_start_error = (double)(feedback->error.time_from_start.sec) +
-                                 (double)(feedback->error.time_from_start.nanosec/1e+9);
 
   RCLCPP_INFO(node->get_logger(), "Current degrees: %.2f\ttime:%.5f",
-                                        feedback->actual.positions[0]*180/3.1416,
-                                        time_from_start);
+                                  (double)feedback->actual.positions[0]*180/3.1416,
+                                  time_from_start);
 
-  // TODO: Here program is shutdown. Probably because of spin_until_future_complete
-  RCLCPP_INFO(node->get_logger(), "Desired degrees: %.2f\ttime:%.5f",
-                                        feedback->desired.positions[0]*180/3.1416,
-                                        time_from_start_desired);
-  RCLCPP_INFO(node->get_logger(), "Error degrees: %.2f\ttime:%.5f",
-                                        feedback->error.positions[0]*180/3.1416,
-                                        time_from_start_error);
+  // TODO: Not working
+  // double time_from_start_desired = (double)(feedback->desired.time_from_start.sec) +
+  //                                  (double)(feedback->desired.time_from_start.nanosec/1e+9);
+  //
+  // RCLCPP_INFO(node->get_logger(), "Desired degrees: %.2f\ttime:%.5f",
+  //                                 (double)feedback->actual.positions[0]*180/3.1416,
+  //                                 time_from_start_desired);
+  //
+  // TODO: Not working
+  // double time_from_start_error = (double)(feedback->error.time_from_start.sec) +
+  //                                 (double)(feedback->error.time_from_start.nanosec/1e+9);
+  //
+  // RCLCPP_INFO(node->get_logger(), "Error degrees: %.2f\ttime:%.5f",
+  //                                 (double)feedback->actual.positions[0]*180/3.1416,
+  //                                 time_from_start_error);
+
   RCLCPP_INFO(node->get_logger(), "-----------------------------");
 }
+
+
+void goal_response_callback(std::shared_future<GoalHandleHRIMJointTrajectory::SharedPtr> goal_handle_future)
+{
+  //
+  // ----------- GOAL RESPONSE ----------- //
+  //
+
+  auto goal_handle = goal_handle_future.get();
+  if (!goal_handle) {
+    RCLCPP_ERROR(node->get_logger(), "Goal was rejected by server");
+    rclcpp::shutdown();
+    return;
+  }
+  RCLCPP_INFO(node->get_logger(), "Goal accepted");
+}
+
+
+void result_callback(const GoalHandleHRIMJointTrajectory::WrappedResult & result)
+{
+  //
+  // ----------- RESULT ----------- //
+  //
+
+  switch(result.code) {
+    case rclcpp_action::ResultCode::SUCCEEDED:
+      RCLCPP_INFO(node->get_logger(), "Goal succeeded");
+      break;
+    case rclcpp_action::ResultCode::ABORTED:
+      RCLCPP_ERROR(node->get_logger(), "Goal was aborted");
+      return;
+    case rclcpp_action::ResultCode::CANCELED:
+      RCLCPP_ERROR(node->get_logger(), "Goal was canceled");
+      return;
+    default:
+      RCLCPP_ERROR(node->get_logger(), "Unknown result code");
+      return;
+  }
+}
+
 
 
 int main(int argc, char ** argv)
@@ -91,68 +136,29 @@ int main(int argc, char ** argv)
   goal_msg.trajectory.points.push_back(point2);
   goal_msg.trajectory.points.push_back(point3);
 
-  RCLCPP_INFO(node->get_logger(), "Sending goal");
-  // Ask server to achieve some goal. Assign feedback callback
+  // Gather callbacks
   rclcpp_action::Client<HRIMJointTrajectory>::SendGoalOptions options = rclcpp_action::Client<HRIMJointTrajectory>::SendGoalOptions();
   options.feedback_callback = feedback_callback;
+  options.goal_response_callback = goal_response_callback;
+  options.result_callback = result_callback;
+
+  // Ask server to achieve some goal. Assign feedback, goal_response and result callbacks
+  RCLCPP_INFO(node->get_logger(), "Sending goal");
   auto goal_handle_future = action_client->async_send_goal(goal_msg, options);
 
-  if (rclcpp::spin_until_future_complete(node, goal_handle_future) !=
-    rclcpp::executor::FutureReturnCode::SUCCESS)
-  {
-    RCLCPP_ERROR(node->get_logger(), "`send_goal` call failed");
-    return 1;
-  }
-
-
   //
-  // ----------- GOAL RESPONSE ----------- //
+  // ----------- GOAL SENT ----------- //
   //
 
-  GoalHandleHRIMJointTrajectory::SharedPtr goal_handle = goal_handle_future.get();
-  if (!goal_handle) {
-    RCLCPP_ERROR(node->get_logger(), "Goal was rejected by server");
-    rclcpp::shutdown();
-    return 0;
-  }
+  // TODO: This skips the feedback and results callbacks. Response callback is fine.
+  // if (rclcpp::spin_until_future_complete(node, goal_handle_future) !=
+  //   rclcpp::executor::FutureReturnCode::SUCCESS)
+  // {
+  //   RCLCPP_ERROR(node->get_logger(), "`send_goal` call failed");
+  //   return 1;
+  // }
 
-  //
-  // ----------- GET RESULT ----------- //
-  //
-
-  // Wait for the server to be done with the goal
-  auto result_future = action_client->async_get_result(goal_handle);
-
-  RCLCPP_INFO(node->get_logger(), "Waiting for result");
-
-  if (rclcpp::spin_until_future_complete(node, result_future) !=
-    rclcpp::executor::FutureReturnCode::SUCCESS)
-  {
-    RCLCPP_ERROR(node->get_logger(), "`get_result` call failed");
-    return 1;
-  }
-
-  // TODO: Here program is shutdown. Probably because of spin_until_future_complete
-
-  GoalHandleHRIMJointTrajectory::WrappedResult result = result_future.get();
-
-  switch(result.code) {
-    case rclcpp_action::ResultCode::SUCCEEDED:
-      RCLCPP_INFO(node->get_logger(), "Goal succeeded");
-      break;
-    case rclcpp_action::ResultCode::ABORTED:
-      RCLCPP_ERROR(node->get_logger(), "Goal was aborted");
-      return 1;
-    case rclcpp_action::ResultCode::CANCELED:
-      RCLCPP_ERROR(node->get_logger(), "Goal was canceled");
-      return 1;
-    default:
-      RCLCPP_ERROR(node->get_logger(), "Unknown result code");
-      return 1;
-  }
-
-
-
+  rclcpp::spin(node);
 
   action_client.reset();
   node.reset();
