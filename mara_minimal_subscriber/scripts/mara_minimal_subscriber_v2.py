@@ -11,8 +11,8 @@ class MinimalSubscriber(Node):
         # Initialize Node with name "mara_minimal_subscriber"
         super().__init__('mara_minimal_subscriber')
 
-        # Subscribe to topic "/hrim_actuation_servomotor_000000000001/state_axis1" and link it to "minimal_callback" function
-        self.create_subscription(StateRotaryServo, '/hrim_actuation_servomotor_000000000001/state_axis1',
+        # Subscribe to topic "/hrim_actuator_rotaryservo_000000000001/state_axis1" and link it to "minimal_callback" function
+        self.create_subscription(StateRotaryServo, '/hrim_actuator_rotaryservo_000000000001/state_axis1',
             self.minimal_callback,
             qos_profile=qos_profile_sensor_data) # QoS profile for reading (joint) sensors
 

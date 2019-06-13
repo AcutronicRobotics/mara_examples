@@ -11,8 +11,8 @@ rclpy.init(args=None)
 # Create Node with name "mara_minimal_client"
 node = rclpy.create_node("mara_minimal_client")
 
-# Create a client for service "/hrim_actuation_gripper_000000000004/goal"
-client = node.create_client(ControlFinger, "/hrim_actuation_gripper_000000000004/fingercontrol", qos_profile=qos_profile_services_default)
+# Create a client for service "/hrim_actuator_gripper_000000000004/goal"
+client = node.create_client(ControlFinger, "/hrim_actuator_gripper_000000000004/fingercontrol", qos_profile=qos_profile_services_default)
 
 # Create request with the same type as the service, ControlFinger
 req = ControlFinger.Request()

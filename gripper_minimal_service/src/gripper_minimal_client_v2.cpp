@@ -10,7 +10,7 @@ class MinimalClient : public rclcpp::Node
     MinimalClient(): Node("gripper_minimal_client")
     {
       client = this->create_client<hrim_actuator_gripper_srvs::srv::ControlFinger>(
-        "/hrim_actuation_gripper_000000000004/fingercontrol");
+        "/hrim_actuator_gripper_000000000004/fingercontrol");
 
       // Wait for service to be avaiable before calling it
       while (!client->wait_for_service(1s)) {

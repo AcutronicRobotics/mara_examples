@@ -11,8 +11,8 @@ class MinimalPublisher(Node):
         # Initialize Node with name "mara_minimal_publisher"
         super().__init__('mara_minimal_publisher')
 
-        # Create a publisher on topic "/hrim_actuation_servomotor_000000000001/goal_axis1"
-        self.pub_ = self.create_publisher(GoalRotaryServo, '/hrim_actuation_servomotor_000000000001/goal_axis1',
+        # Create a publisher on topic "/hrim_actuator_rotaryservo_000000000001/goal_axis1"
+        self.pub_ = self.create_publisher(GoalRotaryServo, '/hrim_actuator_rotaryservo_000000000001/goal_axis1',
                                                 qos_profile=qos_profile_sensor_data)
 
         # Create message with the same type as the topic, GoalRotaryServo

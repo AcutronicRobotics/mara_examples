@@ -10,8 +10,8 @@ class MinimalClient(Node):
     def __init__(self):
         super().__init__('mara_minimal_client')
 
-        # Create a client for service "/hrim_actuation_gripper_000000000004/goal"
-        self.client = self.create_client(ControlFinger, "/hrim_actuation_gripper_000000000004/fingercontrol")
+        # Create a client for service "/hrim_actuator_gripper_000000000004/goal"
+        self.client = self.create_client(ControlFinger, "/hrim_actuator_gripper_000000000004/fingercontrol")
 
         # Wait for service to be avaiable before calling it
         while not self.client.wait_for_service(timeout_sec=1.0):

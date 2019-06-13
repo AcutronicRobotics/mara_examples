@@ -8,8 +8,8 @@ int main(int argc, char * argv[])
   // Create Node with name "mara_minimal_publisher"
   auto node = rclcpp::Node::make_shared("mara_minimal_publisher");
 
-  // Create a publisher on topic "/hrim_actuation_servomotor_000000000001/goal_axis1"
-  auto pub = node->create_publisher<hrim_actuator_rotaryservo_msgs::msg::GoalRotaryServo>("/hrim_actuation_servomotor_000000000001/goal_axis1", rmw_qos_profile_sensor_data);
+  // Create a publisher on topic "/hrim_actuator_rotaryservo_000000000001/goal_axis1"
+  auto pub = node->create_publisher<hrim_actuator_rotaryservo_msgs::msg::GoalRotaryServo>("/hrim_actuator_rotaryservo_000000000001/goal_axis1", rmw_qos_profile_sensor_data);
 
   // Publishing rate of 1 Hz
   rclcpp::WallRate loop_rate(1);
