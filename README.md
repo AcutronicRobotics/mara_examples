@@ -1,6 +1,22 @@
 # MARA Examples
 
-Please make sure you have followed the steps in [MARA repository](https://github.com/AcutronicRobotics/MARA/tree/crystal#install) to set up ROS2, HRIM and dependencies.
+Please make sure you have followed the steps in [MARA repository | crystal branch](https://github.com/AcutronicRobotics/MARA/tree/crystal#install) to set up ROS2, HRIM and dependencies.
+
+
+## Build
+
+Clone this repository in your ROS2 workspace.
+```bash
+cd ~/ros2_mara_ws/src && git clone https://github.com/AcutronicRobotics/mara_examples.git
+```
+
+Compile.
+```bash
+source /opt/ros/crystal/setup.bash
+cd ~/ros2_mara_ws && colcon build --merge-install --packages-skip individual_trajectories_bridge
+```
+
+## Run
 
 ### Terminal 1
 
