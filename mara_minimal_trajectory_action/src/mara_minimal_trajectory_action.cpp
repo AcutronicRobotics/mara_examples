@@ -21,27 +21,9 @@ void feedback_callback(
 
   double time_from_start = (double)(feedback->actual.time_from_start.sec) +
                            (double)(feedback->actual.time_from_start.nanosec/1e+9);
-
   RCLCPP_INFO(node->get_logger(), "Current degrees: %.2f\ttime:%.5f",
                                   (double)feedback->actual.positions[0]*180/3.1416,
                                   time_from_start);
-
-  // TODO: Not working
-  // double time_from_start_desired = (double)(feedback->desired.time_from_start.sec) +
-  //                                  (double)(feedback->desired.time_from_start.nanosec/1e+9);
-  //
-  // RCLCPP_INFO(node->get_logger(), "Desired degrees: %.2f\ttime:%.5f",
-  //                                 (double)feedback->actual.positions[0]*180/3.1416,
-  //                                 time_from_start_desired);
-  //
-  // TODO: Not working
-  // double time_from_start_error = (double)(feedback->error.time_from_start.sec) +
-  //                                 (double)(feedback->error.time_from_start.nanosec/1e+9);
-  //
-  // RCLCPP_INFO(node->get_logger(), "Error degrees: %.2f\ttime:%.5f",
-  //                                 (double)feedback->actual.positions[0]*180/3.1416,
-  //                                 time_from_start_error);
-
   RCLCPP_INFO(node->get_logger(), "-----------------------------");
 }
 
@@ -93,6 +75,7 @@ int main(int argc, char ** argv)
   std::string action_name("/hrim_actuator_rotaryservo_000000000001/trajectory_axis1");
   printf("Trying to connect with the action %s\n", action_name.c_str());
 
+  // Initialize node and client
   node = rclcpp::Node::make_shared("minimal_action_client");
   auto action_client = rclcpp_action::create_client<HRIMJointTrajectory>(node, action_name);
 
@@ -150,16 +133,10 @@ int main(int argc, char ** argv)
   // ----------- GOAL SENT ----------- //
   //
 
-  // TODO: This skips the feedback and results callbacks. Response callback is fine.
-  // if (rclcpp::spin_until_future_complete(node, goal_handle_future) !=
-  //   rclcpp::executor::FutureReturnCode::SUCCESS)
-  // {
-  //   RCLCPP_ERROR(node->get_logger(), "`send_goal` call failed");
-  //   return 1;
-  // }
-
+  // Spin indefinitely
   rclcpp::spin(node);
 
+  // Shutdown
   action_client.reset();
   node.reset();
   rclcpp::shutdown();
