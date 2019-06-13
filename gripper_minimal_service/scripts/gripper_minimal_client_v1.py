@@ -12,14 +12,13 @@ rclpy.init(args=None)
 node = rclpy.create_node("mara_minimal_client")
 
 # Create a client for service "/hrim_actuation_gripper_000000000004/goal"
-client = node.create_client(ControlFinger, "/hrim_actuation_gripper_000000000004/goal", qos_profile=qos_profile_services_default)
+client = node.create_client(ControlFinger, "/hrim_actuator_gripper_000000000004/fingercontrol", qos_profile=qos_profile_services_default)
 
 # Create request with the same type as the service, ControlFinger
 req = ControlFinger.Request()
 
 # Position range 0 - 0.87 rad
-# TODO: The range is wider for me (up to 9.0 sometimes)
-req.goal_linearposition = 0.87
+req.goal_angularposition = 0.
 
 # Wait for service to be avaiable before calling it
 while not client.wait_for_service(timeout_sec=1.0):

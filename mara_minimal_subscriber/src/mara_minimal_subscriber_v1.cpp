@@ -17,9 +17,9 @@ int main(int argc, char * argv[])
 
   // Subscribe to topic "/hrim_actuation_servomotor_000000000001/state_axis1" and link it to "minimal_callback" function
   auto sub = node->create_subscription<hrim_actuator_rotaryservo_msgs::msg::StateRotaryServo>(
-    "/hrim_actuation_servomotor_000000000001/state_axis1",
-    minimal_callback,
-    rmw_qos_profile_sensor_data); // QoS profile for reading (joint) sensors
+    "/hrim_actuator_rotaryservo_000000000001/state_axis1",
+    rclcpp::SensorDataQoS(), // QoS profile for reading (joint) sensors
+    minimal_callback);
 
   // Spin listening to all subscribed topics
   rclcpp::spin(node);

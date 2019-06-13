@@ -13,13 +13,13 @@ int main(int argc, char ** argv)
   auto node = rclcpp::Node::make_shared("mara_minimal_client");
 
   // Create a client for service "/hrim_actuation_gripper_000000000004/goal"
-  auto client = node->create_client<hrim_actuator_gripper_srvs::srv::ControlFinger>("/hrim_actuation_gripper_000000000004/goal");
+  auto client = node->create_client<hrim_actuator_gripper_srvs::srv::ControlFinger>("/hrim_actuator_gripper_000000000004/fingercontrol");
 
   // Create request with the same type as the service, ControlFinger
   auto request = std::make_shared<hrim_actuator_gripper_srvs::srv::ControlFinger::Request>();
 
   // Position range 0 - 0.87 rad
-  request->goal_linearposition = 0.87;
+  request->goal_angularposition = 0.;
 
   // Wait for service to be avaiable before calling it
   while (!client->wait_for_service(1s)) {
