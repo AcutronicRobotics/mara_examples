@@ -21,22 +21,24 @@ void feedback_callback(
 
   double time_from_start = (double)(feedback->actual.time_from_start.sec) +
                            (double)(feedback->actual.time_from_start.nanosec/1e+9);
-  double time_from_start_desired = (double)(feedback->desired.time_from_start.sec) +
-                                   (double)(feedback->desired.time_from_start.nanosec/1e+9);
-  double time_from_start_error = (double)(feedback->error.time_from_start.sec) +
-                                 (double)(feedback->error.time_from_start.nanosec/1e+9);
 
   RCLCPP_INFO(node->get_logger(), "Current degrees: %.2f\ttime:%.5f",
                                         feedback->actual.positions[0]*180/3.1416,
                                         time_from_start);
 
-  // TODO: Here program is shutdown. Probably because of spin_until_future_complete
-  RCLCPP_INFO(node->get_logger(), "Desired degrees: %.2f\ttime:%.5f",
-                                        feedback->desired.positions[0]*180/3.1416,
-                                        time_from_start_desired);
-  RCLCPP_INFO(node->get_logger(), "Error degrees: %.2f\ttime:%.5f",
-                                        feedback->error.positions[0]*180/3.1416,
-                                        time_from_start_error);
+  // Not working
+  // double time_from_start_desired = (double)(feedback->desired.time_from_start.sec) +
+  //                                  (double)(feedback->desired.time_from_start.nanosec/1e+9);
+  // RCLCPP_INFO(node->get_logger(), "Desired degrees: %.2f\ttime:%.5f",
+  //                                 feedback->desired.positions[0]*180/3.1416,
+  //                                 time_from_start_desired);
+  //
+  // double time_from_start_error = (double)(feedback->error.time_from_start.sec) +
+  //                                 (double)(feedback->error.time_from_start.nanosec/1e+9);
+  // RCLCPP_INFO(node->get_logger(), "Error degrees: %.2f\ttime:%.5f",
+  //                                 feedback->error.positions[0]*180/3.1416,
+  //                                 time_from_start_error);
+
   RCLCPP_INFO(node->get_logger(), "-----------------------------");
 }
 
@@ -45,7 +47,7 @@ int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  std::string action_name("/hrim_actuation_servomotor_000000000001/trajectory_axis1");
+  std::string action_name("/hrim_actuator_rotaryservo_000000000001/trajectory_axis1");
   printf("Trying to connect with the action %s\n", action_name.c_str());
 
   node = rclcpp::Node::make_shared("minimal_action_client");
